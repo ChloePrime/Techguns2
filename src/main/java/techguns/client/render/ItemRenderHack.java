@@ -115,21 +115,25 @@ public class ItemRenderHack {
 	}
 	
 	protected static boolean shouldRenderItem(ItemStack stack, EntityLivingBase elb, ItemCameraTransforms.TransformType transform, boolean leftHanded) {
-		if( !(transform==TransformType.FIRST_PERSON_LEFT_HAND || transform==TransformType.THIRD_PERSON_LEFT_HAND || 
-				transform==TransformType.FIRST_PERSON_RIGHT_HAND || transform==TransformType.THIRD_PERSON_RIGHT_HAND)) {
+		if (!(transform == TransformType.FIRST_PERSON_LEFT_HAND || transform == TransformType.THIRD_PERSON_LEFT_HAND ||
+				transform == TransformType.FIRST_PERSON_RIGHT_HAND || transform == TransformType.THIRD_PERSON_RIGHT_HAND)) {
 			return true;
 		}
-		
-		boolean mainhand = transform==TransformType.FIRST_PERSON_RIGHT_HAND || transform==TransformType.THIRD_PERSON_RIGHT_HAND;
-		if (elb.getPrimaryHand()==EnumHandSide.LEFT) {
-			mainhand=!mainhand;
+
+		boolean mainhand = transform == TransformType.FIRST_PERSON_RIGHT_HAND || transform == TransformType.THIRD_PERSON_RIGHT_HAND;
+		// ChloePrime: fix compatibility with CNPC projectiles.
+		if (elb == null) {
+			return true;
+		}
+		if (elb.getPrimaryHand() == EnumHandSide.LEFT) {
+			mainhand = !mainhand;
 		}
 		if (mainhand) {
 			return true;
 		} else {
 
 			return GunManager.canUseOffhand(elb.getHeldItemMainhand(), stack, elb);
-			
+
 		}
 	}
 }
